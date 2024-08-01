@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Contact;
+
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -226,7 +228,7 @@ class AdminController extends Controller
     {
         if(Auth::id())
         {
-            
+
             $order =Order::find($id);
             $pdf = Pdf::loadView('admin.invoice',compact('order'));
             return $pdf->download('invoice.pdf');
@@ -246,6 +248,37 @@ class AdminController extends Controller
             $searchtext = $request->search;
             $order = Order::where('name','LIKE',"%$searchtext%")->orWhere('product_title','LIKE',"%$searchtext%")->get();
             return view('admin.order',compact('order'));
+        }
+        else
+        {
+            return redirect('/login');
+        }
+
+
+    }
+
+    public function view_contact()
+    {
+        if(Auth::id())
+        {
+            $contact = Contact::all();
+            return view('admin.view_contact',compact('contact'));
+        }
+        else
+        {
+            return redirect('/login');
+        }
+
+
+    }
+
+    public function delete_contact($id)
+    {
+        if(Auth::id())
+        {
+            $contact = Contact::find($id);
+            $contact->delete();
+            return redirect()->back()->with('message','Caregory deleted successfully');
         }
         else
         {

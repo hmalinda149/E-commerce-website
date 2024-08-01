@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Contact;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
@@ -318,10 +319,32 @@ class HomeController extends Controller
         return view('home.about');
     }
 
-    public function contact()
+    public function contact_us()
     {
-        return view('home.contact');
+        return view('home.contact_us');
     }
 
+    public function add_contact( Request $request)
+    {
+        if(Auth::id())
+        {
+            $contact = new Contact;
+
+            $contact->name = $request->name;
+            $contact->email = $request->email;
+            $contact->subject = $request->subject;
+            $contact->message = $request->message;
+
+            $contact->save();
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect('/login');
+        }
+
+
+
+    }
 
 }
