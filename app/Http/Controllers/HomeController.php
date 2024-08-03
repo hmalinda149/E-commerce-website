@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use Illuminate\Support\Facades\DB;
+use App\Models\Contact;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use PhpParser\Node\Stmt\Foreach_;
-use Session;
 use Stripe;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -157,50 +159,112 @@ class HomeController extends Controller
 
     }
 
-    public function cash_on_deli()
-    {
-        if(Auth::id())
-        {
-            $user = Auth::user();
-            $userid = $user->id;
-            $data = cart::where('user_id','=',$userid)->get();
+    // public function cash_on_deli()
+    // {
+    //     if(Auth::id())
+    //     {
+    //         $user = Auth::user();
+    //         $userid = $user->id;
+    //         $data = cart::where('user_id','=',$userid)->get();
 
-            foreach($data as $data)
+    //         foreach($data as $data)
+    //         {
+    //             $order = new Order;
+
+    //             $order->name = $data->name;
+    //             $order->email = $data->email;
+    //             $order->phone = $data->phone;
+    //             $order->address = $data->address;
+    //             $order->user_id = $data->user_id;
+    //             $order->product_title = $data->product_title;
+    //             $order->price = $data->price;
+    //             $order->quantity = $data->quantity;
+    //             $order->image = $data->image;
+    //             $order->product_id = $data->product_id;
+
+    //             $order->payment_status = 'cash on delevery';
+    //             $order->delivery_status = 'processing';
+    //             $order->save();
+
+    //             $cart_id = $data->id;
+    //             $cart = cart::find($cart_id);
+    //             $cart->delete();
+
+
+    //         }
+    //         return redirect()->back()->with('message','We have received ypur order. We will connect with you soon...');
+    //     }
+    //     else
+    //     {
+    //         return redirect('/login');
+    //     }
+
+
+
+
+    // }
+    public function cash_on_deli()
+{
+    if(Auth::id())
+    {
+        $user = Auth::user();
+        $userid = $user->id;
+        $data = Cart::where('user_id', $userid)->get();
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($data as $item)
             {
                 $order = new Order;
 
-                $order->name = $data->name;
-                $order->email = $data->email;
-                $order->phone = $data->phone;
-                $order->address = $data->address;
-                $order->user_id = $data->user_id;
-                $order->product_title = $data->product_title;
-                $order->price = $data->price;
-                $order->quantity = $data->quantity;
-                $order->image = $data->image;
-                $order->product_id = $data->product_id;
+                $order->name = $item->name;
+                $order->email = $item->email;
+                $order->phone = $item->phone;
+                $order->address = $item->address;
+                $order->user_id = $item->user_id;
+                $order->product_title = $item->product_title;
+                $order->price = $item->price;
+                $order->quantity = $item->quantity;
+                $order->image = $item->image;
+                $order->product_id = $item->product_id;
 
-                $order->payment_status = 'cash on delevery';
+                $order->payment_status = 'cash on delivery';
                 $order->delivery_status = 'processing';
                 $order->save();
 
-                $cart_id = $data->id;
-                $cart = cart::find($cart_id);
+                // Update the product quantity
+                $product = Product::find($item->product_id);
+                if ($product) {
+                    if ($product->quantity >= $item->quantity) {
+                        $product->quantity -= $item->quantity;
+                        $product->save();
+                    } else {
+                        DB::rollBack();
+                        return redirect()->back()->with('message', 'Product not available in the requested quantity');
+                    }
+                } else {
+                    DB::rollBack();
+                    return redirect()->back()->with('message', 'Product not found');
+                }
+
+                $cart_id = $item->id;
+                $cart = Cart::find($cart_id);
                 $cart->delete();
-
-
             }
-            return redirect()->back()->with('message','We have received ypur order. We will connect with you soon...');
+
+            DB::commit();
+            return redirect()->back()->with('message', 'We have received your order. We will connect with you soon...');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('message', 'An error occurred while processing your order');
         }
-        else
-        {
-            return redirect('/login');
-        }
-
-
-
-
     }
+    else
+    {
+        return redirect('/login');
+    }
+}
 
     public function stripe($totalprice)
     {
@@ -318,10 +382,32 @@ class HomeController extends Controller
         return view('home.about');
     }
 
-    public function contact()
+    public function contact_us()
     {
-        return view('home.contact');
+        return view('home.contact_us');
     }
 
+    public function add_contact( Request $request)
+    {
+        if(Auth::id())
+        {
+            $contact = new Contact;
+
+            $contact->name = $request->name;
+            $contact->email = $request->email;
+            $contact->subject = $request->subject;
+            $contact->message = $request->message;
+
+            $contact->save();
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect('/login');
+        }
+
+
+
+    }
 
 }

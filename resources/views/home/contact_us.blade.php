@@ -41,7 +41,7 @@
                            <a class="nav-link" href="{{url('all_products')}}">Products</a>
                         </li>
 
-                        <li class="nav-item active">
+                        <li class="nav-item">
                            <a class="nav-link" href="{{url('/about')}}">About</a>
                         </li>
 
@@ -91,15 +91,88 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="full">
-                     <h3>About us</h3>
+                     <h3>Contact Us</h3>
                   </div>
                </div>
             </div>
          </div>
       </section>
       <!-- end inner page section -->
+      <section class="why_section layout_padding">
+        <div class="container">
+
+           <div class="row">
+              <div class="col-md-4">
+                 <div class="box " style="background-color: rgb(32, 22, 22)">
+                    <div class="img-box">
+                        <h3 style="font-size:25px" >
+                            Contact Number
+                         </h3>
+
+                    </div>
+                    <div class="detail-box">
+
+                       <p>
+                        +91 987 654 3210
+                       </p>
+                    </div>
+                 </div>
+              </div>
+              <div class="col-md-4">
+                 <div class="box " style="background-color: rgb(32, 22, 22)">
+                    <div class="img-box">
+                        <h3 style="font-size:25px">
+                            Email
+                        </h3>
+
+                    </div>
+                    <div class="detail-box">
+                       <p>
+                        admin@gmail.com
+                       </p>
+                    </div>
+                 </div>
+              </div>
+              <div class="col-md-4">
+                 <div class="box" style="background-color: rgb(32, 22, 22)">
+                    <div class="img-box" >
+                        <h3 style="font-size:25px">
+                           Address
+                         </h3>
+                    </div>
+                    <div class="detail-box">
+                       <p>
+                        Matara Road,Ahangama.
+                       </p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </section>
+
       <!-- why section -->
-      @include('home.why')
+      <section class="why_section layout_padding">
+        <div class="container">
+
+           <div class="row">
+              <div class="col-lg-8 offset-lg-2">
+                 <div class="full">
+                    <form action="{{url('add_contact')}}" method="POST">
+                        @csrf
+                       <fieldset>
+                          <input type="text" placeholder="Enter your full name" name="name" required />
+                          <input type="email" placeholder="Enter your email address" name="email" required />
+                          <input type="text" placeholder="Enter subject" name="subject" required />
+                          <textarea placeholder="Enter your message" required name="message"></textarea>
+                          <input type="submit" value="Submit"/>
+                       </fieldset>
+                    </form>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </section>
       <!-- end why section -->
 
       <!-- end arrival section -->

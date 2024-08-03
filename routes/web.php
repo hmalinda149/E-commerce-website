@@ -36,7 +36,9 @@ route::get('product_search',[HomeController::class,'product_search']);
 route::get('/services',[HomeController::class,'services']);
 route::get('/about',[HomeController::class,'about']);
 
-route::get('/contact',[HomeController::class,'contact']);
+route::get('contact_us',[HomeController::class,'contact_us']);
+
+route::post('add_contact',[HomeController::class,'add_contact']);
 
 
 
@@ -61,6 +63,10 @@ route::get('delivered/{id}',[AdminController::class,'delivered']);
 route::get('print_pdf/{id}',[AdminController::class,'print_pdf']);
 
 route::get('search',[AdminController::class,'search']);
+route::get('/view_contact',[AdminController::class,'view_contact']);
+
+route::get('delete_contact/{id}',[AdminController::class,'delete_contact']);
+
 
 
 

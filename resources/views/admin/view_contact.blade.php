@@ -68,12 +68,12 @@
                 <li ><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Product </a>
                     <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
                       <li><a href="{{url('add_product')}}">Add Product</a></li>
-                      <li class="active"><a href="{{url('view_product')}}">view Product</a></li>
+                      <li ><a href="{{url('view_product')}}">view Product</a></li>
 
                     </ul>
                   </li>
                   <li ><a href="{{url('order')}}"> <i class="icon-grid"></i>Orders </a></li>
-                  <li><a href="{{url('view_contact')}}"> <i class="icon-grid"></i>Contact </a></li>
+                  <li class="active"><a href="{{url('view_contact')}}"> <i class="icon-grid"></i>Contact </a></li>
 
 
 
@@ -96,46 +96,31 @@
 
                     @endif
 
-                    <h1> Products</h1>
+                    <h1>View Contact</h1>
 
                     <div class="div_deg">
                         <table class="table_deg">
                             <tr>
-                                <th>Product Title</th>
-                                <th>Description</th>
-                                <th>Quantity</th>
-                                <th>Category</th>
-                                <th>price</th>
-                                <th>Discount price</th>
-                                <th>Image</th>
-                                <th>Edit</th>
+                                <th>Customer Name</th>
+                                <th>Email</th>
+                                <th>subject</th>
+                                <th>Message</th>
                                 <th>Delete</th>
                             </tr>
 
-                            @foreach ($product as $product)
+
+                            @foreach ($contact as $contact)
 
                             <tr>
-                                <td>{{$product->title}}</td>
-                                <td>{{$product->description}}</td>
-                                <td>{{$product->quantity}}</td>
-                                <td>{{$product->category}}</td>
-                                <td>{{$product->price}}</td>
-                                <td>{{$product->discount_price}}</td>
-                                <td>
-                                    <img src="/products/{{$product->image}}" alt="" class="img_edit" >
-                                </td>
-                                <td>
-                                    <a href="{{url('update_product',$product->id)}}" class="btn btn-success">Edit</a>
-                                </td>
-                                <td>
-                                    <a href="{{url('delete_product',$product->id)}}" class="btn btn-danger" onclick="return confirm('Are you sure to delete this ?')">
-                                        Delete
-                                    </a>
-                                </td>
-
+                                <td>{{$contact->name}}</td>
+                                <td>{{$contact->email}}</td>
+                                <td>{{$contact->subject}}</td>
+                                <td>{{$contact->message}}</td>
+                                <td><a href="{{url('delete_contact',$contact->id)}}" class="btn btn-danger">Delete</a></td>
                             </tr>
 
                             @endforeach
+
 
 
 
