@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use Illuminate\Support\Facades\DB;
-use App\Models\Contact;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
