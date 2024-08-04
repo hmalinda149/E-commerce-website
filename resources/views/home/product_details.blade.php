@@ -97,7 +97,7 @@
                   </div>
 
                   <div>
-                    @if($product->quantity > 0)
+                    @if($product->quantity > 5)
                     <label for="" class="badge bg-success"><p style="color: white; font-size:25px;">In Stock</p></label>
                     @else
                     <label for="" class="badge bg-danger"><p style="color: white; font-size:15px;">Out Of Stock</p></label>
@@ -111,11 +111,14 @@
                         @csrf
 
                      <div class="input-group mb-3" style="max-width: 120px;">
+                        @if ($product->quantity > 5)
                        <input type="number" class="form-control text-center" name="quantity" value="1" min="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                     </div>
+                       @endif
+                    </div>
                      <div class="input-group mb-3">
 
-                        @if ($product->quantity > 0)
+
+                        @if ($product->quantity > 5)
 
                         <p><input type="submit" value="Add to Cart" class="btn btn-primary"></p>
 

@@ -128,20 +128,52 @@ class HomeController extends Controller
 
     }
 
-    public function show_cart()
-    {
-        if(Auth::id())
-        {
-            $id = Auth::user()->id;
-            $cart = Cart::where('user_id','=',$id)->get();
-            return view('home.show_cart',compact('cart'));
-        }
-        else
-        {
-            return redirect('login');
-        }
+    // public function show_cart()
+    // {
+    //     if(Auth::id())
+    //     {
+    //         $id = Auth::user()->id;
+    //         $cart = Cart::where('user_id','=',$id)->get();
+    //         return view('home.show_cart',compact('cart'));
+    //     }
+    //     else
+    //     {
+    //         return redirect('login');
+    //     }
 
+    // }
+    public function show_cart()
+{
+    if(Auth::id())
+    {
+        $id = Auth::user()->id;
+        $cart = Cart::where('user_id', '=', $id)->get();
+        return view('home.show_cart', compact('cart'));
     }
+    else
+    {
+        return redirect('login');
+    }
+}
+public function update_cart_quantity(Request $request)
+{
+    if (Auth::id()) {
+        $cartItem = Cart::find($request->id);
+
+        if ($cartItem) {
+            $cartItem->quantity = $request->quantity;
+            $cartItem->save();
+
+            // Calculate new total price
+            $totalPrice = Cart::where('user_id', Auth::user()->id)->sum(DB::raw('quantity * price'));
+
+            return response()->json(['totalPrice' => $totalPrice, 'itemTotal' => $cartItem->quantity * $cartItem->price]);
+        }
+    }
+
+    return response()->json(['error' => 'Unauthorized'], 401);
+}
+
 
     public function remove_cart($id)
     {
@@ -306,6 +338,12 @@ class HomeController extends Controller
             $order->payment_status = 'Paid';
             $order->delivery_status = 'processing';
             $order->save();
+
+            $product = Product::find($data->product_id); // Make sure you have a Product model
+                if ($product) {
+                    $product->quantity -= $data->quantity; // Decrease the quantity
+                    $product->save(); // Save the updated product
+                }
 
             $cart_id = $data->id;
             $cart = cart::find($cart_id);

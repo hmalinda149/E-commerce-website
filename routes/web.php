@@ -33,6 +33,9 @@ route::get('search_product',[HomeController::class,'search_product']);
 route::get('all_products',[HomeController::class,'all_products']);
 route::get('product_search',[HomeController::class,'product_search']);
 
+
+Route::post('/update_cart_quantity', [HomeController::class, 'update_cart_quantity'])->name('update_cart_quantity');
+
 route::get('/services',[HomeController::class,'services']);
 route::get('/about',[HomeController::class,'about']);
 
