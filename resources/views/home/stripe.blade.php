@@ -182,6 +182,10 @@ $(function() {
             $form.get(0).submit();
         }
     }
+        @if (Session::has('success'))
+            $('#total-price').text('0');
+        @endif
+
 
 });
 </script>

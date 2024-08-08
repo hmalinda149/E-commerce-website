@@ -103,8 +103,9 @@
                                     <tr>
                                         <th class="product-thumbnail">Image</th>
                                         <th class="product-name">Product</th>
-                                        <th class="product-price">Quantity</th>
-                                        <th class="product-quantity">Price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-price">Unit Price</th>
+                                        <th class="product-price">Total Price</th>
                                         <th class="product-remove">Remove</th>
                                     </tr>
                                 </thead>
@@ -119,7 +120,7 @@
                                                 <h2 class="h5 text-black">{{ $cartItem->product_title }}</h2>
                                             </td>
                                             <td>
-                                                <input type="number" name="quantity" class="quantity-input" data-id="{{ $cartItem->id }}" value="{{ $cartItem->quantity }}">
+                                                <input type="number" min="1" name="quantity" class="quantity-input" data-id="{{ $cartItem->id }}" value="{{ $cartItem->quantity }}">
                                             </td>
                                             <td class="item-price" data-price="{{ $cartItem->price }}">{{ $cartItem->price }}</td>
                                             <td class="item-total">{{ $cartItem->price * $cartItem->quantity }}</td>
@@ -155,7 +156,7 @@
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">LKR <span id="cart-total">{{ $totalprice }}</span></strong>
+                                        <strong class="text-black"><span id="cart-total">{{ $totalprice }}</span></strong>
                                     </div>
                                 </div>
                                 <div class="row">

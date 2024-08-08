@@ -5,13 +5,12 @@
     <title>Invoice</title>
 
     <style>
-        html,
-        body {
+        html, body {
             margin: 10px;
             padding: 10px;
             font-family: sans-serif;
         }
-        h1,h2,h3,h4,h5,h6,p,span,label {
+        h1, h2, h3, h4, h5, h6, p, span, label {
             font-family: sans-serif;
         }
         table {
@@ -30,7 +29,6 @@
             padding: 8px;
             font-size: 14px;
         }
-
         .heading {
             font-size: 24px;
             margin-top: 12px;
@@ -52,7 +50,6 @@
         .order-details tbody tr td:nth-child(3) {
             width: 20%;
         }
-
         .text-start {
             text-align: left;
         }
@@ -89,7 +86,6 @@
                 <th width="50%" colspan="2" class="text-end company-data">
                     <span>Order ID: {{$order->id}}</span> <br>
                     <span>Date: {{$order->created_at}}</span> <br>
-
                     <span>Address: {{$order->address}}</span> <br>
                 </th>
             </tr>
@@ -102,62 +98,60 @@
             <tr>
                 <td>Order Id:</td>
                 <td>{{$order->id}}</td>
-
                 <td>Full Name:</td>
                 <td>{{$order->name}}</td>
             </tr>
             <tr>
                 <td>Ordered Date:</td>
                 <td>{{$order->created_at}}</td>
-
                 <td>Email Id:</td>
                 <td>{{$order->email}}</td>
             </tr>
             <tr>
                 <td>Payment Mode:</td>
                 <td>{{$order->payment_status}}</td>
-
-
                 <td>Address:</td>
                 <td>{{$order->address}}</td>
             </tr>
-
-
         </tbody>
     </table>
 
     <table>
         <thead>
             <tr>
-                <th class="no-border text-start heading" colspan="5">
+                <th class="no-border text-start heading" colspan="3">
                     Order Items
                 </th>
             </tr>
             <tr class="bg-blue">
-
                 <th>Product</th>
                 <th>Quantity</th>
                 <th>Price</th>
-
-
             </tr>
         </thead>
         <tbody>
+            @php
+                $totalPrice = 0;
+            @endphp
+            @foreach ($order->items as $item)
             <tr>
-
-                <td>
-                    {{$order->Product_title}}
-                </td>
-                <td width="10%">{{$order->quantity}}</td>
-                <td width="10%">{{$order->price}}</td>
-
+                <td>{{ $item->product_title }}</td>
+                <td width="10%">{{ $item->quantity }}</td>
+                <td width="10%">{{ $item->price }}</td>
             </tr>
-
+            @php
+                $totalPrice += $item->price * $item->quantity;
+            @endphp
+            @endforeach
         </tbody>
     </table>
 
-    <br>
-
+    <table>
+        <tr>
+            <td colspan="2" class="text-end total-heading">Total Price:</td>
+            <td class="text-end total-heading">{{ $totalPrice }}</td>
+        </tr>
+    </table>
 
 </body>
 </html>

@@ -309,8 +309,8 @@ public function update_cart_quantity(Request $request)
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         Stripe\Charge::create ([
-                "amount" => $totalprice * 100,
-                "currency" => "usd",
+                "amount" => $totalprice,
+                "currency" => "lkr"*100,
                 "source" => $request->stripeToken,
                 "description" => "Thanks for Payment."
         ]);
@@ -354,7 +354,7 @@ public function update_cart_quantity(Request $request)
 
         Session::flash('success', 'Payment successful!');
 
-        return back();
+        return back()->with('totalprice', 0);
     }
 
     public function show_order()
